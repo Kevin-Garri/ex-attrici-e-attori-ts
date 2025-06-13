@@ -101,6 +101,29 @@ GET /actresses
 La funzione deve restituire un array di oggetti Actress.
 Può essere anche un array vuoto.*/
 
+async function getAllActresses(): Promise<Actress[]> {
+  try {
+    const response = await fetch(`http://localhost:3333/actresses`)
+    if (!response.ok) {
+      throw new Error(`Errore HTTP ${response.status}:${response.statusText}`)
+    }
+    const dati = await response.json()
+    if (!(dati instanceof Array)) {
+      throw new Error('Formato dei dati non valido: non è un array!')
+    }
+    const attriciValide: Actress[] = dati.filter(isActress)
+    return attriciValide
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Errore non riesco a recuperare le attrici:', error);
+
+    } else {
+      console.error('Errore sconosciuto:', error)
+    }
+    return []
+  }
+}
+
 /*📌 Milestone 5
 Crea una funzione getActresses che riceve un array di numeri (gli id delle attrici).
 Per ogni id nell’array, usa la funzione getActress che hai creato nella Milestone 3 per recuperare l’attrice corrispondente.
